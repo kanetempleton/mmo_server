@@ -1,7 +1,7 @@
 
 # MMO Game Server
 
-Multiplayer game server written in Golang for high performance. The client I wrote that syncs with this communication protocol is written in C++ and can be found here: https://github.com/kanetempleton/mmo_client
+Multiplayer game server written in Golang for high performance. The client I wrote that syncs with this communication protocol is written in C++ and can be found [here.](https://github.com/kanetempleton/mmo_client)
 
 
 ## Getting Started
