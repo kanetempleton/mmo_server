@@ -53,7 +53,7 @@ func (cm *ConnectionManager) receiveData(connection *Connection, data []byte) {
 	// For example, print the received message along with the connection ID.
 	fmt.Printf("Received from Connection ID %d: %s\n", connection.connectionID, data)
 
-	cm.SendMessageDirect(connection,"got your message")
+	//cm.SendMessageDirect(connection,"got your message")
 }
 
 
