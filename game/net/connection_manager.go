@@ -11,15 +11,20 @@ import (
 type ConnectionManager struct {
 	connections map[int]*Connection // Use connectionID as the key
 	mu          sync.RWMutex        // Add a mutex for concurrent access.
+	protocol	*KProtocol
 }
 
 // NewConnectionManager creates a new ConnectionManager instance.
 func NewConnectionManager() *ConnectionManager {
 	return &ConnectionManager{
 		connections: make(map[int]*Connection),
+		protocol:          NewKProtocol(),
 	}
 }
 
+func (cm *ConnectionManager) GetProtocol() *KProtocol {
+	return cm.protocol;
+}
 
 // HandleConnection handles a new incoming connection.
 func (cm *ConnectionManager) HandleConnection(conn net.Conn) {
@@ -52,6 +57,7 @@ func (cm *ConnectionManager) receiveData(connection *Connection, data []byte) {
 	// Implement your logic for processing received data.
 	// For example, print the received message along with the connection ID.
 	fmt.Printf("Received from Connection ID %d: %s\n", connection.connectionID, data)
+	cm.protocol.ProcessPacket(data);
 
 	//cm.SendMessageDirect(connection,"got your message")
 }
@@ -141,6 +147,38 @@ func (cm *ConnectionManager) SendMessage(id int, message string) error {
 	if conn, exists := cm.connections[id]; exists {
 		// Write the message to the connection.
 		_, err := conn.Write([]byte(message))
+		return err
+	}
+
+	// Connection with the specified ID not found.
+	return fmt.Errorf("Connection ID %d not found", id)
+}
+// SendBytes sends a byte array message to a specific connection by ID.
+func (cm *ConnectionManager) SendBytes(id int, message []byte) error {
+	cm.mu.RLock()
+	defer cm.mu.RUnlock()
+
+	// Find the connection with the specified ID.
+	if conn, exists := cm.connections[id]; exists {
+		// Write the message to the connection.
+		_, err := conn.Write(message)
+		return err
+	}
+
+	// Connection with the specified ID not found.
+	return fmt.Errorf("Connection ID %d not found", id)
+}
+func (cm *ConnectionManager) SendPacket(id int, packet *KPacket) error {
+	cm.mu.RLock()
+	defer cm.mu.RUnlock()
+
+	// Find the connection with the specified ID.
+	if conn, exists := cm.connections[id]; exists {
+		// Get the packet bytes using PacketBytes() method.
+		packetBytes := packet.PacketBytes()
+
+		// Write the packet bytes to the connection.
+		_, err := conn.Write(packetBytes)
 		return err
 	}
 

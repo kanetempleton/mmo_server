@@ -70,7 +70,15 @@ func (s *Shell) processCommand(command string) {
 		}
 
 		message := strings.Join(args[2:], " ")
-		s.sendMessage(connectionID, message)
+		//s.sendMessage(connectionID, message)
+		packet := s.launcher.server.ConnectionManager().GetProtocol().SendMessagePacket(message)
+
+		fmt.Printf("packet length is %d\n",packet.PayloadLength());
+
+		// Send the message packet using SendPacket method
+		err = s.launcher.server.ConnectionManager().SendPacket(connectionID, packet)
+
+		//s.launcher.server.ConnectionManager().sendPacket();
 	default:
 		fmt.Println("Unknown command:", command)
 	}
