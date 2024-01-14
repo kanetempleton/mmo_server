@@ -46,6 +46,12 @@ func (cm *ConnectionManager) HandleConnection(conn net.Conn) {
 
 		// Process received data.
 		cm.receiveData(connection, buffer[:n])
+		for i := 0; i < 1024; i++ {
+			fmt.Printf("%d\t%c\t//%d\n", i, buffer[i], buffer[i])
+		}
+
+		fmt.Printf("Received from Connection ID %d: %v\n", connection.connectionID, buffer[:n])
+
 	}
 
 	// Connection is closed, remove it from the manager.
@@ -56,7 +62,7 @@ func (cm *ConnectionManager) HandleConnection(conn net.Conn) {
 func (cm *ConnectionManager) receiveData(connection *Connection, data []byte) {
 	// Implement your logic for processing received data.
 	// For example, print the received message along with the connection ID.
-	fmt.Printf("Received from Connection ID %d: %s\n", connection.connectionID, data)
+	//fmt.Printf("Received from Connection ID %d: %s\n", connection.connectionID, data)
 	cm.protocol.ProcessPacket(data);
 
 	//cm.SendMessageDirect(connection,"got your message")

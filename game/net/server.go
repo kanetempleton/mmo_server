@@ -27,7 +27,7 @@ func (s *Server) Start() error {
 	}
 	s.listener = listener
 
-	fmt.Println("Server is running on tcp://localhost:43595")
+	fmt.Println("Server is running on tcp://127.0.0.1:43595")
 
 	go s.acceptConnections()
 

@@ -20,9 +20,9 @@ func NewKProtocol() *KProtocol {
 }
 
 func (kp *KProtocol) ProcessPacket(dat []byte) {
-	for i := 0; i < 1024; i++ {
+	/*for i := 0; i < 1024; i++ {
 		fmt.Printf("%d\t%c\t//%d\n", i, dat[i], dat[i])
-	}
+	}*/
 
 	//packetVersion := dat[0:4]
 	//packetKey := dat[4:20]
